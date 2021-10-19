@@ -27,7 +27,7 @@ const Content = styled.div`
 
 const FormStyled = styled.form`
   margin: 16px;
-  max-width: 600px;
+  max-width: 400px;
 `
 
 const Form = () => {

@@ -1,9 +1,5 @@
+import { validateEmail } from '../../shared/utils/validation'
 import { Inputs } from '../hooks/useForm'
-
-const validateEmail = (email: string) => {
-  const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-  return re.test(String(email).toLowerCase())
-}
 
 const ValidateInputUsecase = (inputs: Inputs): Inputs => {
   const errors = {} as Inputs

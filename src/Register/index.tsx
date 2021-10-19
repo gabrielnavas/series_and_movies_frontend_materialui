@@ -1,5 +1,5 @@
 import Form from './components/Form'
 
-const RegisterPage = () => <Form />
+const LoginPage = () => <Form />
 
-export default RegisterPage
+export default LoginPage

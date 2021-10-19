@@ -4,13 +4,11 @@ import { useFormik, FormikErrors } from 'formik'
 import { getUrls } from '../../config/url'
 import Router from 'next/router'
 import ValidateInputUsecase from '../usecase/ValidationInputs'
+import * as AuthenticationManager from '../../shared/usecases/AuthenticationManager'
 
 export type Inputs = {
-  name: string
-  lastName: string
   email: string
   password: string
-  passwordConfirmation: string
 }
 
 export type ErrorsInputs = FormikErrors<Inputs>
@@ -33,13 +31,10 @@ const useForm = () => {
     onSubmit: async values => {
       async function __fetch () {
         const payload = {
-          first_name: values.name,
-          last_name: values.lastName,
           email: values.email,
-          password: values.password,
-          password_confirmation: values.passwordConfirmation
+          password: values.password
         }
-        const url = `${getUrls().api.url}/api/user`
+        const url = `${getUrls().api.url}/api/user/login`
 
         const response = await fetch(url, {
           method: 'POST',
@@ -54,10 +49,21 @@ const useForm = () => {
         setIsloading(false)
 
         if (statusCode === 400) {
-          setGlobalErrors(['Usuário já existe com esse email, tente outro.'])
+          setGlobalErrors(['Email ou senha incorretos.'])
         }
         if (statusCode === 201) {
-          Router.push(getUrls().pages.login)
+          const { user, token } = await response.json()
+          AuthenticationManager.setUserAuth({
+            user: {
+              id: user.id,
+              firstName: user.first_name,
+              lastName: user.last_name,
+              email: user.email,
+              createdAt: user.created_at
+            },
+            token
+          })
+          Router.push(getUrls().pages.main)
         }
       }
       setIsloading(true)
